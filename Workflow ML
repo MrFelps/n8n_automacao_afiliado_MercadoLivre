@@ -16,10 +16,10 @@
       ],
       "id": "a0ed0d03-2a1b-4707-b436-d55d16059d58",
       "name": "📩 Receber Link - Telegram",
-      "webhookId": "telegram-bot-wh-001",
+      "webhookId": "000",
       "credentials": {
         "telegramApi": {
-          "id": "TelegramBot001",
+          "id": "000",
           "name": "Telegram Bot"
         }
       },
@@ -42,7 +42,7 @@
       "name": "🍪 Buscar Cookies - Redis",
       "credentials": {
         "redis": {
-          "id": "mu6RfiiUbJcy4Xdt",
+          "id": "000",
           "name": "Redis account"
         }
       }
@@ -146,7 +146,7 @@
       "name": "💾 Salvar Cookies - Redis",
       "credentials": {
         "redis": {
-          "id": "mu6RfiiUbJcy4Xdt",
+          "id": "000",
           "name": "Redis account"
         }
       }
@@ -232,7 +232,7 @@
             },
             {
               "name": "x-csrf-token",
-              "value": "MLtcVE11-iZYTPfGHdwELCJVzHGqdS7HOPkM"
+              "value": "000"
             },
             {
               "name": "cookie",
@@ -242,7 +242,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"urls\": [\n    \"{{ $('📋 Preparar Dados').item.json.url }}\"\n  ],\n  \"tag\": \"gafe5877720\"\n}",
+        "jsonBody": "={\n  \"urls\": [\n    \"{{ $('📋 Preparar Dados').item.json.url }}\"\n  ],\n  \"tag\": \"000\"\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -365,7 +365,7 @@
       "name": "🧠 Groq - Llama 3.3",
       "credentials": {
         "groqApi": {
-          "id": "tdZke31Go8wiM2QD",
+          "id": "000",
           "name": "Groq account"
         }
       }
@@ -392,7 +392,7 @@
           "parameters": [
             {
               "name": "apikey",
-              "value": "F3A9C6D1B72E4A8F9C5D0E1A7B4C8D2F"
+              "value": "000"
             },
             {
               "name": "Content-Type",
@@ -405,7 +405,7 @@
           "parameters": [
             {
               "name": "number",
-              "value": "120363423852356295@g.us"
+              "value": "000@g.us"
             },
             {
               "name": "mediatype",
@@ -454,10 +454,10 @@
       ],
       "id": "bd83cf6d-76ef-49a8-92d0-d4f935cc1780",
       "name": "✅ Confirmar - Telegram",
-      "webhookId": "5fd9c71a-6c68-4fef-ba78-7e7e1c5a9d55",
+      "webhookId": "000",
       "credentials": {
         "telegramApi": {
-          "id": "TelegramBot001",
+          "id": "000",
           "name": "Telegram Bot"
         }
       }
@@ -524,10 +524,10 @@
       ],
       "id": "60bd722c-6c6f-43c7-b0a7-53b5091458ad",
       "name": "❌ Aviso - Sem Preço",
-      "webhookId": "dd363776-c1ca-4a36-9564-496d9e15cb36",
+      "webhookId": "000",
       "credentials": {
         "telegramApi": {
-          "id": "TelegramBot001",
+          "id": "000",
           "name": "Telegram Bot"
         }
       }
@@ -546,7 +546,7 @@
         -1424,
         -80
       ],
-      "webhookId": "26d83437-91a4-4bdd-986a-419bf651228b"
+      "webhookId": "000"
     }
   ],
   "pinData": {},
