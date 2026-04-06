@@ -92,7 +92,7 @@
     <h1>Estratégia de Disparos - ML</h1>
     <div class="webhook-config">
       <span class="webhook-label">URL do n8n:</span>
-      <input type="text" id="webhookUrl" placeholder="https://seu-ngrok.ngrok-free.dev/webhook/receber-links-ml" value="https://glennie-gawsy-tori.ngrok-free.dev/webhook/conta-gotas-ml" />
+      <input type="text" id="webhookUrl" placeholder="https://000.ngrok-free.dev/webhook/000" value="https://000.ngrok-free.dev/webhook/000" />
     </div>
   </header>
 
