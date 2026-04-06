@@ -34,6 +34,7 @@
     .input-group { display: flex; flex-direction: column; gap: 12px; }
     textarea { width: 100%; height: 200px; padding: 14px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; font-size: 14px; resize: vertical; transition: border-color 0.2s; }
     textarea:focus { outline: none; border-color: var(--ml-blue); }
+    .info-text { font-size: 13px; color: var(--ml-gray-text); }
 
     .btn { padding: 0 24px; height: 48px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s; }
     .btn:active { transform: scale(0.98); }
@@ -52,17 +53,17 @@
     .option-btn { background: var(--ml-gray-light); border: 1px solid var(--ml-gray-medium); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--ml-gray-text); cursor: pointer; transition: all 0.2s; }
     .option-btn.selected { background: var(--ml-yellow); border-color: var(--ml-yellow); color: var(--ml-dark); }
 
-    .timer-panel { display: none; background-color: var(--ml-dark); color: white; padding: 15px 20px; border-radius: 6px; justify-content: space-around; align-items: center; margin-bottom: 20px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
-    .timer-box { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .timer-label { font-size: 12px; color: #aaaaaa; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
-    .timer-value { font-size: 26px; font-weight: bold; font-family: monospace; color: var(--ml-yellow); }
-
+    .summary-box { background: #fdfae5; border: 1px solid #f6e696; padding: 12px; border-radius: 4px; font-size: 14px; font-weight: 600; color: #6d6318; text-align: center; }
+    .alert-box { background: #ffebee; border: 1px solid #ffcdd2; padding: 10px; border-radius: 4px; font-size: 12px; font-weight: 600; color: #c62828; text-align: center; margin-bottom: 15px; }
+    
     .actions { display: flex; gap: 12px; margin-top: 8px; }
     .actions .btn { flex: 1; }
-    .status-panel { font-size: 14px; text-align: center; margin-top: 10px; font-weight: bold; color: var(--ml-blue); min-height: 20px; }
+    .status-panel { font-size: 14px; text-align: center; margin-top: 10px; font-weight: bold; color: var(--ml-blue); min-height: 40px; }
 
     .queue-header { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 20px; border-top: 1px solid var(--ml-gray-medium); margin-bottom: 12px; }
     .queue-header h3 { font-size: 16px; font-weight: 600; }
+    .clear-btn { background: transparent; border: none; color: var(--ml-blue); font-size: 13px; cursor: pointer; }
+    .clear-btn:hover { text-decoration: underline; }
 
     .queue-list { display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; padding-right: 5px; }
     .queue-list::-webkit-scrollbar { width: 6px; }
@@ -72,7 +73,16 @@
     .queue-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--ml-gray-medium); border-radius: 4px; background: #fff; }
     .item-info { display: flex; flex-direction: column; gap: 4px; overflow: hidden; margin-right: 10px; flex: 1; }
     .item-url { font-size: 13px; color: var(--ml-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: monospace; }
-    
+    .item-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+
+    .status-badge { padding: 2px 6px; border-radius: 10px; font-weight: 600; text-transform: uppercase; font-size: 10px; }
+    .status-pendente    { background: #e0e0e0; color: #555; }
+    .status-processando { background: #fff0b3; color: #8a7300; }
+    .status-enviado     { background: #cce5ff; color: #004085; }
+    .status-erro        { background: #ffcccc; color: #a30000; }
+    .time-added { color: var(--ml-gray-text); }
+    .remove-item { background: transparent; border: none; color: var(--ml-gray-text); cursor: pointer; font-size: 18px; padding: 4px; flex-shrink: 0; }
+    .remove-item:hover { color: red; }
     @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .webhook-config input { width: 220px; } }
   </style>
 </head>
@@ -82,8 +92,7 @@
     <h1>Estratégia de Disparos - ML</h1>
     <div class="webhook-config">
       <span class="webhook-label">URL do n8n:</span>
-      <!-- VALOR MASCARADO AQUI PARA O GITHUB -->
-      <input type="text" id="webhookUrl" placeholder="https://0000000000.ngrok-free.dev/webhook/conta-gotas-ml" value="https://0000000000.ngrok-free.dev/webhook/conta-gotas-ml" />
+      <input type="text" id="webhookUrl" placeholder="https://seu-ngrok.ngrok-free.dev/webhook/receber-links-ml" value="https://glennie-gawsy-tori.ngrok-free.dev/webhook/conta-gotas-ml" />
     </div>
   </header>
 
@@ -92,24 +101,14 @@
       <h2>1. Adicionar Links à Fila</h2>
       <div class="input-group">
         <textarea id="linksInput" placeholder="Cole os links aqui..."></textarea>
-        <button id="addBtn" class="btn btn-primary" onclick="adicionarLinks()">Enviar para a Planilha</button>
+        <button id="addBtn" class="btn btn-primary" onclick="adicionarLinks()">Adicionar à fila</button>
       </div>
     </div>
 
     <div class="card" id="queuePanel">
       <h2>2. Estratégia de Envio</h2>
       
-      <!-- Cronômetros Visuais -->
-      <div class="timer-panel" id="timerPanel">
-        <div class="timer-box">
-          <span class="timer-label">Próximo Lote Em:</span>
-          <span class="timer-value" id="timerLote">--:--:--</span>
-        </div>
-        <div class="timer-box">
-          <span class="timer-label">Próxima Postagem Em:</span>
-          <span class="timer-value" id="timerPost">--:--:--</span>
-        </div>
-      </div>
+      <div class="alert-box">⚠️ Mantenha esta aba aberta para que os Turnos funcionem.</div>
 
       <div class="controls">
         <div class="control-group">
@@ -140,51 +139,71 @@
           </div>
         </div>
 
+        <div class="summary-box" id="ResumoConfig">Resumo atualizando...</div>
+
         <div class="actions">
-          <button id="startBtn" class="btn btn-yellow" onclick="iniciarEnvio()">Ativar Robô</button>
-          <button id="cancelBtn" class="btn btn-danger" onclick="cancelarEnvio()" disabled>Desligar Robô</button>
+          <button id="startBtn" class="btn btn-yellow" onclick="iniciarEnvio()">Iniciar Estratégia</button>
+          <button id="cancelBtn" class="btn btn-danger" onclick="cancelarEnvio()" disabled>Parar Tudo</button>
         </div>
 
-        <div class="status-panel" id="statusEnvioTexto">Pronto para configurar.</div>
+        <div class="status-panel" id="statusEnvioTexto">Pronto para iniciar.</div>
       </div>
 
       <div class="queue-header">
-        <h3>Links Aguardando Leitura (<span id="queueCount">0</span>)</h3>
+        <h3>Fila (<span id="queueCount">0</span>)</h3>
+        <button class="clear-btn" onclick="limparFila()">Limpar Fila</button>
       </div>
       <div class="queue-list" id="queueList"></div>
     </div>
   </div>
 
   <script>
+    // ── Estado ──────────────────────────────────────────────
     let fila = [];
+    let isSending = false;
+    let proximoTurnoTimestamp = 0;
+    
     let confTurno = 'imediato';
     let confTamanho = 1;
     let confIntervalo = 10;
 
-    // Variáveis do Cronômetro Visual
-    let simulationInterval = null;
-    let isActive = false;
-    let nextLoteTimestamp = 0;
-    let nextPostTimestamp = 0;
-    let postsLeft = 0;
-
+    // ── Init ────────────────────────────────────────────────
     window.onload = function () {
-      setupBtns('turnoOptions', v => { confTurno = v; });
-      setupBtns('loteOptions', v => { confTamanho = parseInt(v); });
-      setupBtns('intervaloOptions', v => { confIntervalo = parseInt(v); });
-      
-      sincronizarComPlanilha();
-      recuperarStatus(); // Pergunta ao servidor se o robô já está ligado
+      setupBtns('turnoOptions', v => { confTurno = v; atualizarResumo(); });
+      setupBtns('loteOptions', v => { confTamanho = parseInt(v); atualizarResumo(); });
+      setupBtns('intervaloOptions', v => { confIntervalo = parseInt(v); atualizarResumo(); });
+      carregarDoStorage();
+      atualizarResumo();
     };
 
     function setupBtns(id, cb) {
       const btns = document.getElementById(id).querySelectorAll('.option-btn');
       btns.forEach(b => b.addEventListener('click', function () {
-        if(isActive) return; // Bloqueia botões enquanto estiver rodando
+        if (isSending) return;
         btns.forEach(x => x.classList.remove('selected'));
         this.classList.add('selected');
         cb(this.dataset.val);
       }));
+    }
+
+    function atualizarResumo() {
+      let tText = confTurno === 'imediato' ? "continuamente" : (confTurno === 'mtn' ? "nos turnos das 10h, 14h e 19h" : "a cada 1 hora");
+      let pText = confTamanho === 1 ? "1 post" : `${confTamanho} posts`;
+      document.getElementById('ResumoConfig').innerText = `Estratégia: Enviar ${pText} ${tText}, aguardando ${confIntervalo}s entre eles.`;
+    }
+
+    // ── Utils de Tempo e Promessas (O Cérebro Novo) ─────────
+    function formatTime(sec) {
+      let h = Math.floor(sec / 3600);
+      let m = Math.floor((sec % 3600) / 60);
+      let s = sec % 60;
+      if (h > 0) return `${h}h ${m}m ${s}s`;
+      if (m > 0) return `${m}m ${s}s`;
+      return `${s}s`;
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     function runGoogleScript(funcName, ...args) {
@@ -193,77 +212,23 @@
       });
     }
 
-    // Resgata a memória da página se fechou e abriu de novo
-    async function recuperarStatus() {
-      try {
-        const status = await runGoogleScript('verificarStatusRobo');
-        if (status.ativo) {
-          confTurno = status.turno;
-          confTamanho = status.tamanho;
-          confIntervalo = status.intervalo;
-
-          document.querySelectorAll('#turnoOptions .option-btn').forEach(b => {
-            b.classList.remove('selected');
-            if (b.dataset.val === confTurno) b.classList.add('selected');
-          });
-          document.querySelectorAll('#loteOptions .option-btn').forEach(b => {
-            b.classList.remove('selected');
-            if (parseInt(b.dataset.val) === confTamanho) b.classList.add('selected');
-          });
-          document.querySelectorAll('#intervaloOptions .option-btn').forEach(b => {
-            b.classList.remove('selected');
-            if (parseInt(b.dataset.val) === confIntervalo) b.classList.add('selected');
-          });
-
-          document.getElementById('startBtn').disabled = true;
-          document.getElementById('cancelBtn').disabled = false;
-          document.getElementById('statusEnvioTexto').innerHTML = '✅ <span style="color: green">Robô Ativado! (Recuperado)</span>';
-
-          isActive = true;
-          document.getElementById('timerPanel').style.display = 'flex';
-          postsLeft = 0; 
-          nextLoteTimestamp = calcularProximoTurnoBg();
-          if(simulationInterval) clearInterval(simulationInterval);
-          simulationInterval = setInterval(updateTimers, 1000);
-        }
-      } catch (e) {
-        console.error("Erro ao verificar status", e);
-      }
+    // ── Persistência e Fila ─────────────────────────────────
+    function salvarStorage() { sessionStorage.setItem('ml_fila', JSON.stringify(fila)); }
+    function carregarDoStorage() {
+      try { const saved = sessionStorage.getItem('ml_fila'); if (saved) fila = JSON.parse(saved); } catch(e) { fila = []; }
+      renderizar();
     }
 
-    async function sincronizarComPlanilha() {
-      document.getElementById('statusEnvioTexto').innerText = '🔄 Lendo banco de dados...';
-      try {
-        const urlsPendentes = await runGoogleScript('carregarPendentesPlanilha');
-        fila = urlsPendentes;
-        if (!isActive) {
-            document.getElementById('statusEnvioTexto').innerHTML = fila.length === 0 ? '⚠️ Fila limpa. Adicione novos links.' : '✅ <span style="color: green">Lidos da planilha.</span>';
-        }
-        renderizar();
-      } catch(e) {
-        document.getElementById('statusEnvioTexto').innerText = '❌ Erro de conexão com a planilha.';
-      }
-    }
-
-    async function adicionarLinks() {
+    function adicionarLinks() {
       const ta = document.getElementById('linksInput');
       const validos = ta.value.split(/\r?\n/).map(l => l.trim()).filter(l => l.includes('mercadolivre.com') || l.includes('mercadolibre.com'));
       if (validos.length === 0) return alert('Nenhum link válido.');
-      
-      document.getElementById('addBtn').disabled = true;
-      document.getElementById('addBtn').innerText = "Salvando...";
-
-      try {
-        await runGoogleScript('adicionarLinksPlanilha', validos);
-        ta.value = ''; 
-        await sincronizarComPlanilha(); 
-      } catch(e) {
-        alert("Erro ao salvar no banco.");
-      } finally {
-        document.getElementById('addBtn').disabled = false;
-        document.getElementById('addBtn').innerText = "Enviar para a Planilha";
-      }
+      validos.forEach(url => fila.push({ id: crypto.randomUUID(), url, status: 'pendente', dataAdicao: Date.now() }));
+      ta.value = ''; salvarStorage(); renderizar();
     }
+
+    function removerItem(id) { if(isSending) return; fila = fila.filter(i => i.id !== id); salvarStorage(); renderizar(); }
+    function limparFila() { if(isSending) return; fila = []; salvarStorage(); renderizar(); }
 
     function renderizar() {
       const container = document.getElementById('queueList');
@@ -271,113 +236,130 @@
       if (fila.length === 0) { container.innerHTML = '<div style="padding:15px;color:#666;text-align:center;font-size:14px;">A fila está vazia.</div>'; return; }
       
       container.innerHTML = '';
-      fila.forEach((url, index) => {
+      fila.forEach(item => {
         const div = document.createElement('div');
-        div.className = 'queue-item';
-        div.innerHTML = `<div class="item-info"><span class="item-url">${(index + 1)}. ${url.substring(0, 52) + '...'}</span></div>`;
+        div.className = 'queue-item'; div.id = `item-${item.id}`;
+        div.innerHTML = `
+          <div class="item-info">
+            <span class="item-url">${item.url.substring(0, 52) + '...'}</span>
+            <div class="item-meta"><span class="status-badge status-${item.status}">${item.status}</span></div>
+          </div>
+          <button class="remove-item" onclick="removerItem('${item.id}')" ${isSending ? 'disabled' : ''}>×</button>
+        `;
         container.appendChild(div);
       });
     }
 
-    // --- LÓGICA DE SIMULAÇÃO DOS CRONÔMETROS ---
-    function formatTime(s) {
-       if(s <= 0) return "00:00:00";
-       let h = Math.floor(s / 3600);
-       let m = Math.floor((s % 3600) / 60);
-       let sec = s % 60;
-       return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+    function setStatus(id, status) {
+      let el = document.getElementById(`item-${id}`);
+      if (el) { el.querySelector('.status-badge').className = `status-badge status-${status}`; el.querySelector('.status-badge').innerText = status; }
+      let item = fila.find(x => x.id === id); if (item) item.status = status;
+      salvarStorage();
     }
 
-    function calcularProximoTurnoBg() {
-      let now = new Date();
-      if (confTurno === 'imediato') {
-          return now.getTime() + 60000; 
-      } else if (confTurno === '1h') {
-          return now.getTime() + 3600000; 
-      } else if (confTurno === 'mtn') {
-          let target = new Date();
-          let h = now.getHours();
-          if (h < 10) target.setHours(10,0,0,0);
-          else if (h < 14) target.setHours(14,0,0,0);
-          else if (h < 19) target.setHours(19,0,0,0);
-          else { target.setDate(target.getDate() + 1); target.setHours(10,0,0,0); }
-          return target.getTime();
-      }
-    }
-
-    function updateTimers() {
-       if (!isActive) return;
-       let now = Date.now();
-
-       if (postsLeft > 0) {
-          document.getElementById('timerLote').innerText = "Rodando...";
-          if (now >= nextPostTimestamp) {
-             postsLeft--;
-             if (postsLeft > 0) {
-                nextPostTimestamp = now + (confIntervalo * 1000);
-             } else {
-                nextLoteTimestamp = calcularProximoTurnoBg();
-             }
-          } else {
-             let diff = Math.ceil((nextPostTimestamp - now)/1000);
-             document.getElementById('timerPost').innerText = formatTime(diff);
-          }
-       } else {
-          document.getElementById('timerPost').innerText = "--:--:--";
-          if (now >= nextLoteTimestamp) {
-             postsLeft = confTamanho;
-             nextPostTimestamp = Date.now(); 
-          } else {
-             let diff = Math.ceil((nextLoteTimestamp - now)/1000);
-             document.getElementById('timerLote').innerText = formatTime(diff);
-          }
-       }
-    }
-
+    // ── Lógica de Agendamento e Disparo ──────────────────────
     async function iniciarEnvio() {
-      let webhook = document.getElementById('webhookUrl').value.trim();
-      if (!webhook) return alert('Insira a URL do n8n.');
+      if (!document.getElementById('webhookUrl').value.trim()) return alert('Insira a URL do n8n.');
+      if (fila.filter(i => i.status === 'pendente' || i.status === 'erro').length === 0) return alert('Fila vazia.');
 
+      isSending = true;
+      proximoTurnoTimestamp = 0; // Zera para calcular o próximo
       document.getElementById('startBtn').disabled = true;
       document.getElementById('cancelBtn').disabled = false;
-      document.getElementById('statusEnvioTexto').innerText = '⏳ Ativando robô...';
+      
+      processarFila(); // Inicia o laço contínuo
+    }
 
-      try {
-        await runGoogleScript('configurarTriggers', confTurno, confTamanho, confIntervalo, webhook);
-        document.getElementById('statusEnvioTexto').innerHTML = '✅ <span style="color: green">Robô Ativado!</span>';
-        
-        isActive = true;
-        document.getElementById('timerPanel').style.display = 'flex';
-        postsLeft = 0; 
-        nextLoteTimestamp = calcularProximoTurnoBg();
-        if(simulationInterval) clearInterval(simulationInterval);
-        simulationInterval = setInterval(updateTimers, 1000);
-        
-      } catch (e) {
-        document.getElementById('statusEnvioTexto').innerText = '❌ Erro ao ativar o robô. Tente novamente.';
-        document.getElementById('startBtn').disabled = false;
-        document.getElementById('cancelBtn').disabled = true;
+    function cancelarEnvio() {
+      isSending = false;
+      document.getElementById('startBtn').disabled = false;
+      document.getElementById('cancelBtn').disabled = true;
+      document.getElementById('statusEnvioTexto').innerText = '🛑 Estratégia pausada.';
+      renderizar();
+    }
+
+    function calcularProximoTurno() {
+      if (confTurno === '1h') {
+          proximoTurnoTimestamp = Date.now() + 3600 * 1000;
+      } else if (confTurno === 'mtn') {
+          let agora = new Date();
+          let hora = agora.getHours();
+          let proxHora = 10;
+          
+          if (hora < 10) proxHora = 10;
+          else if (hora < 14) proxHora = 14;
+          else if (hora < 19) proxHora = 19;
+          else proxHora = 10;
+
+          let alvo = new Date();
+          if (proxHora === 10 && hora >= 19) alvo.setDate(alvo.getDate() + 1); // Dia seguinte
+          alvo.setHours(proxHora, 0, 0, 0);
+          proximoTurnoTimestamp = alvo.getTime();
       }
     }
 
-    async function cancelarEnvio() {
-      document.getElementById('startBtn').disabled = false;
-      document.getElementById('cancelBtn').disabled = true;
-      document.getElementById('statusEnvioTexto').innerText = '🛑 Desligando robô...';
+    async function processarFila() {
+      while (isSending) {
+        let pendentes = fila.filter(i => i.status === 'pendente' || i.status === 'erro');
+        if (pendentes.length === 0) {
+          document.getElementById('statusEnvioTexto').innerText = "✅ Todos os links foram enviados!";
+          break;
+        }
 
-      try {
-        await runGoogleScript('pararTriggers');
-        document.getElementById('statusEnvioTexto').innerText = '🛑 Estratégia pausada.';
+        // 1. Aguarda o Turno (Se não for Imediato)
+        if (confTurno !== 'imediato') {
+          if (proximoTurnoTimestamp === 0) calcularProximoTurno(); // Calcula qual é o próximo horário
+          
+          while (isSending && Date.now() < proximoTurnoTimestamp) {
+            let dif = Math.floor((proximoTurnoTimestamp - Date.now()) / 1000);
+            document.getElementById('statusEnvioTexto').innerText = `⏳ Turno Agendado... Iniciando lote em ${formatTime(dif)}`;
+            await sleep(1000); // Atualiza o relógio a cada 1 segundo
+          }
+        }
         
-        isActive = false;
-        if(simulationInterval) clearInterval(simulationInterval);
-        document.getElementById('timerPanel').style.display = 'none';
-        
-      } catch (e) {
-        document.getElementById('statusEnvioTexto').innerText = '❌ Erro ao parar. Tente novamente.';
-        document.getElementById('startBtn').disabled = true;
-        document.getElementById('cancelBtn').disabled = false;
+        if (!isSending) break;
+
+        // 2. Monta o Lote do Turno
+        pendentes = fila.filter(i => i.status === 'pendente' || i.status === 'erro');
+        let loteAtual = pendentes.slice(0, confTamanho);
+        let webhook = document.getElementById('webhookUrl').value.trim();
+
+        // 3. Dispara os posts do lote
+        for (let i = 0; i < loteAtual.length; i++) {
+          if (!isSending) break;
+          let item = loteAtual[i];
+          
+          setStatus(item.id, 'processando');
+          document.getElementById('statusEnvioTexto').innerText = `🚀 Turno Ativo: Enviando post ${i+1} de ${loteAtual.length}...`;
+
+          try {
+            await runGoogleScript('enviarLoteParaN8n', webhook, [item.url]);
+            setStatus(item.id, 'enviado');
+          } catch (e) {
+            setStatus(item.id, 'erro');
+          }
+
+          // Intervalo entre os posts (pula se for o último do lote)
+          if (i < loteAtual.length - 1 && isSending) {
+            for (let s = confIntervalo; s > 0; s--) {
+              if (!isSending) break;
+              document.getElementById('statusEnvioTexto').innerText = `Post enviado. Aguardando ${s}s para o próximo post do lote...`;
+              await sleep(1000);
+            }
+          }
+        }
+
+        if (!isSending) break;
+
+        // 4. Prepara a próxima rodada
+        calcularProximoTurno();
+        if (confTurno === 'imediato') {
+          document.getElementById('statusEnvioTexto').innerText = `Lote concluído. Iniciando o próximo em 3s...`;
+          await sleep(3000); // Pequena pausa no modo imediato para não bugar
+        }
       }
+
+      cancelarEnvio(); // Reseta os botões quando a fila acaba
     }
   </script>
 </body>

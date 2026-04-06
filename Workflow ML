@@ -1,5 +1,5 @@
 {
-  "name": "Workflow ML",
+  "name": "O CERTO",
   "nodes": [
     {
       "parameters": {
@@ -11,15 +11,15 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.1,
       "position": [
-        -1888,
+        -1424,
         112
       ],
       "id": "a0ed0d03-2a1b-4707-b436-d55d16059d58",
       "name": "📩 Receber Link - Telegram",
-      "webhookId": "00000000-0000-0000-0000-000000000000",
+      "webhookId": "telegram-bot-wh-001",
       "credentials": {
         "telegramApi": {
-          "id": "0000000000000000",
+          "id": "TelegramBot001",
           "name": "Telegram Bot"
         }
       },
@@ -35,14 +35,14 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        -1664,
+        -1232,
         16
       ],
       "id": "d10febeb-c8a1-4d25-9e22-0f8cbed573de",
       "name": "🍪 Buscar Cookies - Redis",
       "credentials": {
         "redis": {
-          "id": "0000000000000000",
+          "id": "mu6RfiiUbJcy4Xdt",
           "name": "Redis account"
         }
       }
@@ -82,7 +82,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1424,
+        -1040,
         16
       ],
       "id": "0c8f159b-dda5-4840-9906-a340b082599f",
@@ -113,7 +113,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        -1184,
+        -848,
         16
       ]
     },
@@ -124,7 +124,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -944,
+        -656,
         16
       ],
       "id": "b558add4-8790-424c-b3e0-1d1b463fc68c",
@@ -139,14 +139,14 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        -704,
+        -464,
         16
       ],
       "id": "cf6fb7a5-7a26-432e-81b3-1989d146fac2",
       "name": "💾 Salvar Cookies - Redis",
       "credentials": {
         "redis": {
-          "id": "0000000000000000",
+          "id": "mu6RfiiUbJcy4Xdt",
           "name": "Redis account"
         }
       }
@@ -232,7 +232,7 @@
             },
             {
               "name": "x-csrf-token",
-              "value": "00000000-000000000000000000000000000"
+              "value": "MLtcVE11-iZYTPfGHdwELCJVzHGqdS7HOPkM"
             },
             {
               "name": "cookie",
@@ -242,13 +242,13 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"urls\": [\n    \"{{ $('📋 Preparar Dados').item.json.url }}\"\n  ],\n  \"tag\": \"SEU_CODIGO_AFILIADO\"\n}",
+        "jsonBody": "={\n  \"urls\": [\n    \"{{ $('📋 Preparar Dados').item.json.url }}\"\n  ],\n  \"tag\": \"gafe5877720\"\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        -464,
+        -272,
         16
       ],
       "id": "f8a50c03-ca69-413c-b9cb-68c9cbb7e0c7",
@@ -281,7 +281,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -224,
+        -80,
         16
       ],
       "id": "60dbdaa9-3a74-4479-b8e5-e8a65c717676",
@@ -294,7 +294,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        0,
+        112,
         0
       ],
       "id": "329acbff-78d5-400c-ac62-d03a767e3517",
@@ -331,7 +331,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        240,
+        304,
         0
       ],
       "id": "8ded6077-0d71-46c7-9f55-bfe7ee4381cd",
@@ -344,7 +344,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        480,
+        496,
         0
       ],
       "id": "ec627164-03cf-446f-99b9-a8b977256d4e",
@@ -358,14 +358,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
       "position": [
-        976,
-        192
+        944,
+        176
       ],
       "id": "7f8e6247-3a47-44e6-b17d-fd42778603c0",
       "name": "🧠 Groq - Llama 3.3",
       "credentials": {
         "groqApi": {
-          "id": "0000000000000000",
+          "id": "tdZke31Go8wiM2QD",
           "name": "Groq account"
         }
       }
@@ -377,8 +377,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1360,
-        0
+        1264,
+        -16
       ],
       "id": "4148710a-1c76-4aaf-b9db-34497e00b5ea",
       "name": "✍️ Montar Postagem"
@@ -392,7 +392,7 @@
           "parameters": [
             {
               "name": "apikey",
-              "value": "00000000000000000000000000000000"
+              "value": "F3A9C6D1B72E4A8F9C5D0E1A7B4C8D2F"
             },
             {
               "name": "Content-Type",
@@ -405,7 +405,7 @@
           "parameters": [
             {
               "name": "number",
-              "value": "000000000000000000@g.us"
+              "value": "120363423852356295@g.us"
             },
             {
               "name": "mediatype",
@@ -434,8 +434,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        1600,
-        0
+        1456,
+        -16
       ],
       "id": "c285aabc-0114-4ffe-b875-97f69d084aea",
       "name": "📤 Enviar WhatsApp - Evolution"
@@ -449,15 +449,15 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1856,
-        0
+        1632,
+        -16
       ],
       "id": "bd83cf6d-76ef-49a8-92d0-d4f935cc1780",
       "name": "✅ Confirmar - Telegram",
-      "webhookId": "00000000-0000-0000-0000-000000000000",
+      "webhookId": "5fd9c71a-6c68-4fef-ba78-7e7e1c5a9d55",
       "credentials": {
         "telegramApi": {
-          "id": "0000000000000000",
+          "id": "TelegramBot001",
           "name": "Telegram Bot"
         }
       }
@@ -471,8 +471,8 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
-        976,
-        0
+        944,
+        -16
       ],
       "id": "14ed4bfa-61c4-422b-84ff-d20b74821d7b",
       "name": "🤖 IA - Chamada"
@@ -524,10 +524,10 @@
       ],
       "id": "60bd722c-6c6f-43c7-b0a7-53b5091458ad",
       "name": "❌ Aviso - Sem Preço",
-      "webhookId": "00000000-0000-0000-0000-000000000000",
+      "webhookId": "dd363776-c1ca-4a36-9564-496d9e15cb36",
       "credentials": {
         "telegramApi": {
-          "id": "0000000000000000",
+          "id": "TelegramBot001",
           "name": "Telegram Bot"
         }
       }
@@ -543,10 +543,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1.1,
       "position": [
-        -1888,
+        -1424,
         -80
       ],
-      "webhookId": "00000000-0000-0000-0000-000000000000"
+      "webhookId": "26d83437-91a4-4bdd-986a-419bf651228b"
     }
   ],
   "pinData": {},
@@ -744,6 +744,11 @@
           }
         ]
       ]
+    },
+    "✅ Confirmar - Telegram": {
+      "main": [
+        []
+      ]
     }
   },
   "active": true,
@@ -752,10 +757,10 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "f9fd02d3-5d65-4b0a-b8d3-c31d8970745d",
+  "versionId": "28fc10dd-1944-4b3d-a0df-54f08d131d53",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "0000000000000000000000000000000000000000000000000000000000000000"
+    "instanceId": "c213914f45b59f25d4c4e9045cbcd01704759b8090c357fc58ec0d1b58f01501"
   },
   "id": "j5o0niOThbhiFbTd",
   "tags": []
