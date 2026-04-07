@@ -192,7 +192,7 @@
       document.getElementById('ResumoConfig').innerText = `Estratégia: Enviar ${pText} ${tText}, aguardando ${confIntervalo}s entre eles.`;
     }
 
-    // ── Utils de Tempo e Promessas (O Cérebro Novo) ─────────
+    // ── Utils de Tempo e Promessas ─────────
     function formatTime(sec) {
       let h = Math.floor(sec / 3600);
       let m = Math.floor((sec % 3600) / 60);
@@ -306,25 +306,22 @@
           break;
         }
 
-        // 1. Aguarda o Turno (Se não for Imediato)
         if (confTurno !== 'imediato') {
-          if (proximoTurnoTimestamp === 0) calcularProximoTurno(); // Calcula qual é o próximo horário
+          if (proximoTurnoTimestamp === 0) calcularProximoTurno();
           
           while (isSending && Date.now() < proximoTurnoTimestamp) {
             let dif = Math.floor((proximoTurnoTimestamp - Date.now()) / 1000);
             document.getElementById('statusEnvioTexto').innerText = `⏳ Turno Agendado... Iniciando lote em ${formatTime(dif)}`;
-            await sleep(1000); // Atualiza o relógio a cada 1 segundo
+            await sleep(1000); 
           }
         }
         
         if (!isSending) break;
 
-        // 2. Monta o Lote do Turno
         pendentes = fila.filter(i => i.status === 'pendente' || i.status === 'erro');
         let loteAtual = pendentes.slice(0, confTamanho);
         let webhook = document.getElementById('webhookUrl').value.trim();
 
-        // 3. Dispara os posts do lote
         for (let i = 0; i < loteAtual.length; i++) {
           if (!isSending) break;
           let item = loteAtual[i];
@@ -339,7 +336,6 @@
             setStatus(item.id, 'erro');
           }
 
-          // Intervalo entre os posts (pula se for o último do lote)
           if (i < loteAtual.length - 1 && isSending) {
             for (let s = confIntervalo; s > 0; s--) {
               if (!isSending) break;
@@ -351,15 +347,14 @@
 
         if (!isSending) break;
 
-        // 4. Prepara a próxima rodada
         calcularProximoTurno();
         if (confTurno === 'imediato') {
           document.getElementById('statusEnvioTexto').innerText = `Lote concluído. Iniciando o próximo em 3s...`;
-          await sleep(3000); // Pequena pausa no modo imediato para não bugar
+          await sleep(3000);
         }
       }
 
-      cancelarEnvio(); // Reseta os botões quando a fila acaba
+      cancelarEnvio();
     }
   </script>
 </body>

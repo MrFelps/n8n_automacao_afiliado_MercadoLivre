@@ -4,7 +4,7 @@ const MEU_CHAT_ID = "000";
 // ==========================================
 
 function doGet() {
-  return HtmlService.createHtmlOutputFromFile('Index')
+  return HtmlService.createHtmlOutputFromFile('index')
       .setTitle('Painel Lotes - ML')
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }

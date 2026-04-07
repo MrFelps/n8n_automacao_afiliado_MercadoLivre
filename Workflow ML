@@ -1,27 +1,19 @@
 {
-  "name": "O CERTO",
+  "name": "Ecosistema Afiliados - ML (PoC)",
   "nodes": [
     {
       "parameters": {
-        "updates": [
-          "message"
-        ],
+        "updates": ["message"],
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.1,
-      "position": [
-        -1424,
-        112
-      ],
+      "position": [-1424, 112],
       "id": "a0ed0d03-2a1b-4707-b436-d55d16059d58",
       "name": "📩 Receber Link - Telegram",
       "webhookId": "000",
       "credentials": {
-        "telegramApi": {
-          "id": "000",
-          "name": "Telegram Bot"
-        }
+        "telegramApi": { "id": "000", "name": "Telegram Bot" }
       },
       "disabled": true
     },
@@ -34,17 +26,11 @@
       },
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
-      "position": [
-        -1232,
-        16
-      ],
+      "position": [-1232, 16],
       "id": "d10febeb-c8a1-4d25-9e22-0f8cbed573de",
       "name": "🍪 Buscar Cookies - Redis",
       "credentials": {
-        "redis": {
-          "id": "000",
-          "name": "Redis account"
-        }
+        "redis": { "id": "000", "name": "Redis account" }
       }
     },
     {
@@ -81,10 +67,7 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [
-        -1040,
-        16
-      ],
+      "position": [-1040, 16],
       "id": "0c8f159b-dda5-4840-9906-a340b082599f",
       "name": "📋 Preparar Dados"
     },
@@ -94,39 +77,26 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "cookie",
-              "value": "={{ $json.cookie }}"
-            }
+            { "name": "cookie", "value": "={{ $json.cookie }}" }
           ]
         },
         "options": {
-          "response": {
-            "response": {
-              "fullResponse": true
-            }
-          }
+          "response": { "response": { "fullResponse": true } }
         }
       },
       "id": "0c425b0f-5ef5-422b-9301-fb3e67d86c1a",
       "name": "🌐 Requisição Cookies ML",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
-      "position": [
-        -848,
-        16
-      ]
+      "position": [-848, 16]
     },
     {
       "parameters": {
-        "jsCode": "const oldCookieString = $('📋 Preparar Dados').first().json.cookie || \"\";\nconst setCookieArray = $(\"🌐 Requisição Cookies ML\").first().json.headers['set-cookie'] || [];\n\nlet cookieMap = {};\n\nif (oldCookieString) {\n    oldCookieString.split(';').forEach(c => {\n        const [key, ...val] = c.trim().split('=');\n        if (key) cookieMap[key] = val.join('=');\n    });\n}\n\nsetCookieArray.forEach(c => {\n    const cookiePart = c.split(';')[0];\n    const [key, ...val] = cookiePart.trim().split('=');\n    if (key) cookieMap[key] = val.join('=');\n});\n\nconst newCookieString = Object.keys(cookieMap)\n    .map(key => `${key}=${cookieMap[key]}`)\n    .join('; ');\n\nreturn { cookies_atualizados: newCookieString };"
+        "jsCode": "const oldCookieString = $('📋 Preparar Dados').first().json.cookie || \"\";\nconst setCookieArray = $(\"🌐 Requisição Cookies ML\").first().json.headers['set-cookie'] || [];\n\n// ⚠️ SECURITY OMISSION: A lógica avançada de validação, mapeamento de bypass e persistência de sessão foi ocultada neste repositório público.\n// Abaixo está uma representação estrutural do payload esperado pela pipeline.\n\nconst newCookieString = \"COOKIE_MERGE_LOGIC_OMITTED_FOR_SECURITY_REASONS\"; \n\nreturn { cookies_atualizados: newCookieString };"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -656,
-        16
-      ],
+      "position": [-656, 16],
       "id": "b558add4-8790-424c-b3e0-1d1b463fc68c",
       "name": "🔀 Mesclar Cookies"
     },
@@ -138,17 +108,11 @@
       },
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
-      "position": [
-        -464,
-        16
-      ],
+      "position": [-464, 16],
       "id": "cf6fb7a5-7a26-432e-81b3-1989d146fac2",
       "name": "💾 Salvar Cookies - Redis",
       "credentials": {
-        "redis": {
-          "id": "000",
-          "name": "Redis account"
-        }
+        "redis": { "id": "000", "name": "Redis account" }
       }
     },
     {
@@ -158,86 +122,14 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "accept",
-              "value": "application/json, text/plain, */*"
-            },
-            {
-              "name": "accept-language",
-              "value": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7"
-            },
-            {
-              "name": "device-memory",
-              "value": "8"
-            },
-            {
-              "name": "downlink",
-              "value": "10"
-            },
-            {
-              "name": "dpr",
-              "value": "1"
-            },
-            {
-              "name": "ect",
-              "value": "4g"
-            },
-            {
-              "name": "origin",
-              "value": "https://www.mercadolivre.com.br"
-            },
-            {
-              "name": "priority",
-              "value": "u=1, i"
-            },
-            {
-              "name": "referer",
-              "value": "https://www.mercadolivre.com.br/afiliados/linkbuilder"
-            },
-            {
-              "name": "rtt",
-              "value": "50"
-            },
-            {
-              "name": "sec-ch-ua",
-              "value": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\""
-            },
-            {
-              "name": "sec-ch-ua-mobile",
-              "value": "?0"
-            },
-            {
-              "name": "sec-ch-ua-platform",
-              "value": "\"Windows\""
-            },
-            {
-              "name": "sec-fetch-dest",
-              "value": "empty"
-            },
-            {
-              "name": "sec-fetch-mode",
-              "value": "cors"
-            },
-            {
-              "name": "sec-fetch-site",
-              "value": "same-origin"
-            },
-            {
-              "name": "user-agent",
-              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-            },
-            {
-              "name": "viewport-width",
-              "value": "1082"
-            },
-            {
-              "name": "x-csrf-token",
-              "value": "000"
-            },
-            {
-              "name": "cookie",
-              "value": "={{ $json.cookies_atualizados }}"
-            }
+            { "name": "accept", "value": "application/json, text/plain, */*" },
+            { "name": "accept-language", "value": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7" },
+            { "name": "origin", "value": "https://www.mercadolivre.com.br" },
+            { "name": "referer", "value": "https://www.mercadolivre.com.br/afiliados/linkbuilder" },
+            { "name": "sec-fetch-mode", "value": "cors" },
+            { "name": "user-agent", "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" },
+            { "name": "x-csrf-token", "value": "000" },
+            { "name": "cookie", "value": "={{ $json.cookies_atualizados }}" }
           ]
         },
         "sendBody": true,
@@ -247,10 +139,7 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
-      "position": [
-        -272,
-        16
-      ],
+      "position": [-272, 16],
       "id": "f8a50c03-ca69-413c-b9cb-68c9cbb7e0c7",
       "name": "🔗 Gerar Link Afiliado - ML"
     },
@@ -280,23 +169,17 @@
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
-      "position": [
-        -80,
-        16
-      ],
+      "position": [-80, 16],
       "id": "60dbdaa9-3a74-4479-b8e5-e8a65c717676",
       "name": "✅ Verificar Resposta ML"
     },
     {
       "parameters": {
-        "jsCode": "const mlResp = $input.first().json;\nconst dataNode = $('📋 Preparar Dados').first().json;\n\nconst linkAfiliado = mlResp?.urls?.[0]?.short_url || mlResp?.[0]?.shortened_url || '';\n\nconst url = dataNode.url || '';\nlet itemId = '';\nconst matchDash = url.match(/MLB[-]?(\\d{7,12})/i);\nif (matchDash) { itemId = 'MLB' + matchDash[1]; }\nif (!itemId) { const pathMatch = url.match(/\\/([A-Z]{3}[0-9]{7,12})(?:[\\-_\\/\\?#]|$)/i); if (pathMatch) itemId = pathMatch[1].toUpperCase(); }\n\nreturn [{ json: { url_original: dataNode.url, link_afiliado: linkAfiliado, item_id: itemId, chat_id: dataNode.chat_id, username: dataNode.username } }];"
+        "jsCode": "const mlResp = $input.first().json;\nconst dataNode = $('📋 Preparar Dados').first().json;\n\n// ⚠️ SECURITY OMISSION: A validação em regex dos metadados foi simplificada.\nconst linkAfiliado = mlResp?.urls?.[0]?.short_url || mlResp?.[0]?.shortened_url || '';\nlet itemId = 'REGEX_EXTRACTION_OMITTED';\n\nreturn [{ json: { url_original: dataNode.url, link_afiliado: linkAfiliado, item_id: itemId, chat_id: dataNode.chat_id, username: dataNode.username } }];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        112,
-        0
-      ],
+      "position": [112, 0],
       "id": "329acbff-78d5-400c-ac62-d03a767e3517",
       "name": "📦 Extrair Link e Item ID"
     },
@@ -306,47 +189,28 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "User-Agent",
-              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-            },
-            {
-              "name": "Accept",
-              "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
-            },
-            {
-              "name": "Accept-Language",
-              "value": "pt-BR,pt;q=0.9"
-            }
+            { "name": "User-Agent", "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" },
+            { "name": "Accept", "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" },
+            { "name": "Accept-Language", "value": "pt-BR,pt;q=0.9" }
           ]
         },
         "options": {
-          "response": {
-            "response": {
-              "responseFormat": "text"
-            }
-          }
+          "response": { "response": { "responseFormat": "text" } }
         }
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        304,
-        0
-      ],
+      "position": [304, 0],
       "id": "8ded6077-0d71-46c7-9f55-bfe7ee4381cd",
       "name": "🛍️ Buscar Dados do Produto"
     },
     {
       "parameters": {
-        "jsCode": "const html = $input.first().json.data || $input.first().json.body || '';\nconst payload = $('📦 Extrair Link e Item ID').first().json;\n\n// Título\nlet titulo = 'Produto';\nconst titleMatch = html.match(/<meta property=\"og:title\" content=\"([^\"]+)\"/i)\n  || html.match(/<h1[^>]*class=\"[^\"]*ui-pdp-title[^\"]*\"[^>]*>([^<]+)<\\/h1>/i)\n  || html.match(/<title>([^<|]+)/i);\nif (titleMatch) titulo = titleMatch[1].trim();\n\n// Preço via JSON embutido na página\nlet precoAtual = 0;\nlet precoOriginal = 0;\n\nconst jsonPreco = html.match(/\"price\":([\\d.]+).*?\"original_price\":([\\d.]+)/);\nconst jsonPreco2 = html.match(/\"original_price\":([\\d.]+).*?\"price\":([\\d.]+)/);\n\nif (jsonPreco) {\n  precoAtual = parseFloat(jsonPreco[1]);\n  precoOriginal = parseFloat(jsonPreco[2]);\n} else if (jsonPreco2) {\n  precoOriginal = parseFloat(jsonPreco2[1]);\n  precoAtual = parseFloat(jsonPreco2[2]);\n} else {\n  const somentePreco = html.match(/\"price\":([\\d.]+)/);\n  if (somentePreco) precoAtual = parseFloat(somentePreco[1]);\n}\n\n// Monta linha de preço\nlet precoLinha = 'Consulte o preco';\nlet precoAtualStr = '';\nlet precoOriginalStr = '';\n\nif (precoAtual > 0 && precoOriginal > 0 && precoOriginal > precoAtual) {\n  precoAtualStr = precoAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});\n  precoOriginalStr = precoOriginal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});\n  precoLinha = precoAtualStr;\n} else if (precoAtual > 0) {\n  precoLinha = precoAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});\n}\n\n// Parcelas\nlet parcelasTexto = '';\nconst parcelaMatch = html.match(/em (\\d+)x de[^R]*R\\$\\s*([\\d.,]+)/i);\nif (parcelaMatch) parcelasTexto = ` ou ${parcelaMatch[1]}x de R$${parcelaMatch[2]} sem juros`;\n\n// Loja\nlet loja = 'Loja no ML';\nconst lojaMatch = html.match(/\"officialStoreName\":\"([^\"]+)\"/)\n  || html.match(/class=\"[^\"]*official-store[^\"]*\"[^>]*>([^<]+)</)\n  || html.match(/\"seller\":\\{[^}]*\"nickname\":\"([^\"]+)\"/)\n  || html.match(/\"seller\":\\{[^}]*\"name\":\"([^\"]+)\"/);\nif (lojaMatch) loja = lojaMatch[1].trim();\n\n// Imagem\nlet imagem = '';\nconst imgMatch = html.match(/<meta property=\"og:image\" content=\"([^\"]+)\"/i)\n  || html.match(/\"thumbnail\":\"(https:[^\"]+)\"/);\nif (imgMatch) imagem = imgMatch[1].replace('http://', 'https://');\n\nreturn [{ json: {\n  titulo,\n  preco_formatado: precoLinha,\n  preco_atual: precoAtualStr,\n  preco_original: precoOriginalStr,\n  parcelas_texto: parcelasTexto,\n  loja,\n  imagem_url: imagem,\n  link_afiliado: payload.link_afiliado,\n  chat_id: payload.chat_id,\n  username: payload.username\n} }];"
+        "jsCode": "const html = $input.first().json.data || $input.first().json.body || '';\nconst payload = $('📦 Extrair Link e Item ID').first().json;\n\n// ⚠️ SECURITY OMISSION: O Web Scraping estruturado usando match() de variáveis dinâmicas do JSON nativo da plataforma foi ocultado.\n\nlet titulo = 'Produto Extraído - Nome Omitido';\nlet precoAtualStr = '0.00';\nlet precoOriginalStr = '0.00';\nlet precoLinha = 'Consulte o preco';\nlet parcelasTexto = ' ou 10x sem juros (Placeholder)';\nlet loja = 'Loja Oficial (Placeholder)';\nlet imagem = 'https://link-da-imagem-omitido.jpg';\n\nreturn [{ json: {\n  titulo,\n  preco_formatado: precoLinha,\n  preco_atual: precoAtualStr,\n  preco_original: precoOriginalStr,\n  parcelas_texto: parcelasTexto,\n  loja,\n  imagem_url: imagem,\n  link_afiliado: payload.link_afiliado,\n  chat_id: payload.chat_id,\n  username: payload.username\n} }];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        496,
-        0
-      ],
+      "position": [496, 0],
       "id": "ec627164-03cf-446f-99b9-a8b977256d4e",
       "name": "⚙️ Processar Produto"
     },
@@ -357,17 +221,11 @@
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
-      "position": [
-        944,
-        176
-      ],
+      "position": [944, 176],
       "id": "7f8e6247-3a47-44e6-b17d-fd42778603c0",
       "name": "🧠 Groq - Llama 3.3",
       "credentials": {
-        "groqApi": {
-          "id": "000",
-          "name": "Groq account"
-        }
+        "groqApi": { "id": "000", "name": "Groq account" }
       }
     },
     {
@@ -376,10 +234,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        1264,
-        -16
-      ],
+      "position": [1264, -16],
       "id": "4148710a-1c76-4aaf-b9db-34497e00b5ea",
       "name": "✍️ Montar Postagem"
     },
@@ -390,53 +245,26 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "apikey",
-              "value": "000"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
+            { "name": "apikey", "value": "000" },
+            { "name": "Content-Type", "value": "application/json" }
           ]
         },
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
-            {
-              "name": "number",
-              "value": "000@g.us"
-            },
-            {
-              "name": "mediatype",
-              "value": "image"
-            },
-            {
-              "name": "mimetype",
-              "value": "image/jpeg"
-            },
-            {
-              "name": "caption",
-              "value": "={{ $json.texto_postagem }}"
-            },
-            {
-              "name": "media",
-              "value": "={{ $json.imagem_url }}"
-            },
-            {
-              "name": "fileName",
-              "value": "produto.jpg"
-            }
+            { "name": "number", "value": "000@g.us" },
+            { "name": "mediatype", "value": "image" },
+            { "name": "mimetype", "value": "image/jpeg" },
+            { "name": "caption", "value": "={{ $json.texto_postagem }}" },
+            { "name": "media", "value": "={{ $json.imagem_url }}" },
+            { "name": "fileName", "value": "produto.jpg" }
           ]
         },
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
-      "position": [
-        1456,
-        -16
-      ],
+      "position": [1456, -16],
       "id": "c285aabc-0114-4ffe-b875-97f69d084aea",
       "name": "📤 Enviar WhatsApp - Evolution"
     },
@@ -448,18 +276,12 @@
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [
-        1632,
-        -16
-      ],
+      "position": [1632, -16],
       "id": "bd83cf6d-76ef-49a8-92d0-d4f935cc1780",
       "name": "✅ Confirmar - Telegram",
       "webhookId": "000",
       "credentials": {
-        "telegramApi": {
-          "id": "000",
-          "name": "Telegram Bot"
-        }
+        "telegramApi": { "id": "000", "name": "Telegram Bot" }
       }
     },
     {
@@ -470,10 +292,7 @@
       },
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
-      "position": [
-        944,
-        -16
-      ],
+      "position": [944, -16],
       "id": "14ed4bfa-61c4-422b-84ff-d20b74821d7b",
       "name": "🤖 IA - Chamada"
     },
@@ -491,10 +310,7 @@
               "id": "check-price-id",
               "leftValue": "={{ $json.preco_formatado }}",
               "rightValue": "Consulte o preco",
-              "operator": {
-                "type": "string",
-                "operation": "notEquals"
-              }
+              "operator": { "type": "string", "operation": "notEquals" }
             }
           ],
           "combinator": "and"
@@ -503,10 +319,7 @@
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
-      "position": [
-        672,
-        0
-      ],
+      "position": [672, 0],
       "id": "5b61654e-36bc-4223-beaa-d538eee49290",
       "name": "🔍 Verificar Preço"
     },
@@ -518,18 +331,12 @@
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
-      "position": [
-        976,
-        400
-      ],
+      "position": [976, 400],
       "id": "60bd722c-6c6f-43c7-b0a7-53b5091458ad",
       "name": "❌ Aviso - Sem Preço",
       "webhookId": "000",
       "credentials": {
-        "telegramApi": {
-          "id": "000",
-          "name": "Telegram Bot"
-        }
+        "telegramApi": { "id": "000", "name": "Telegram Bot" }
       }
     },
     {
@@ -542,226 +349,33 @@
       "name": "🌐 Webhook - Conta Gotas",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1.1,
-      "position": [
-        -1424,
-        -80
-      ],
+      "position": [-1424, -80],
       "webhookId": "000"
     }
   ],
   "pinData": {},
   "connections": {
-    "📩 Receber Link - Telegram": {
-      "main": [
-        [
-          {
-            "node": "🍪 Buscar Cookies - Redis",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "🍪 Buscar Cookies - Redis": {
-      "main": [
-        [
-          {
-            "node": "📋 Preparar Dados",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "📋 Preparar Dados": {
-      "main": [
-        [
-          {
-            "node": "🌐 Requisição Cookies ML",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "🌐 Requisição Cookies ML": {
-      "main": [
-        [
-          {
-            "node": "🔀 Mesclar Cookies",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "🔀 Mesclar Cookies": {
-      "main": [
-        [
-          {
-            "node": "💾 Salvar Cookies - Redis",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "💾 Salvar Cookies - Redis": {
-      "main": [
-        [
-          {
-            "node": "🔗 Gerar Link Afiliado - ML",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "🔗 Gerar Link Afiliado - ML": {
-      "main": [
-        [
-          {
-            "node": "✅ Verificar Resposta ML",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "✅ Verificar Resposta ML": {
-      "main": [
-        [
-          {
-            "node": "📦 Extrair Link e Item ID",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "📦 Extrair Link e Item ID": {
-      "main": [
-        [
-          {
-            "node": "🛍️ Buscar Dados do Produto",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "🛍️ Buscar Dados do Produto": {
-      "main": [
-        [
-          {
-            "node": "⚙️ Processar Produto",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "⚙️ Processar Produto": {
-      "main": [
-        [
-          {
-            "node": "🔍 Verificar Preço",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "🧠 Groq - Llama 3.3": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "🤖 IA - Chamada",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "✍️ Montar Postagem": {
-      "main": [
-        [
-          {
-            "node": "📤 Enviar WhatsApp - Evolution",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "📤 Enviar WhatsApp - Evolution": {
-      "main": [
-        [
-          {
-            "node": "✅ Confirmar - Telegram",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "🤖 IA - Chamada": {
-      "main": [
-        [
-          {
-            "node": "✍️ Montar Postagem",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "🔍 Verificar Preço": {
-      "main": [
-        [
-          {
-            "node": "🤖 IA - Chamada",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "❌ Aviso - Sem Preço",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "🌐 Webhook - Conta Gotas": {
-      "main": [
-        [
-          {
-            "node": "🍪 Buscar Cookies - Redis",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "✅ Confirmar - Telegram": {
-      "main": [
-        []
-      ]
-    }
+    "📩 Receber Link - Telegram": { "main": [[{ "node": "🍪 Buscar Cookies - Redis", "type": "main", "index": 0 }]] },
+    "🍪 Buscar Cookies - Redis": { "main": [[{ "node": "📋 Preparar Dados", "type": "main", "index": 0 }]] },
+    "📋 Preparar Dados": { "main": [[{ "node": "🌐 Requisição Cookies ML", "type": "main", "index": 0 }]] },
+    "🌐 Requisição Cookies ML": { "main": [[{ "node": "🔀 Mesclar Cookies", "type": "main", "index": 0 }]] },
+    "🔀 Mesclar Cookies": { "main": [[{ "node": "💾 Salvar Cookies - Redis", "type": "main", "index": 0 }]] },
+    "💾 Salvar Cookies - Redis": { "main": [[{ "node": "🔗 Gerar Link Afiliado - ML", "type": "main", "index": 0 }]] },
+    "🔗 Gerar Link Afiliado - ML": { "main": [[{ "node": "✅ Verificar Resposta ML", "type": "main", "index": 0 }]] },
+    "✅ Verificar Resposta ML": { "main": [[{ "node": "📦 Extrair Link e Item ID", "type": "main", "index": 0 }]] },
+    "📦 Extrair Link e Item ID": { "main": [[{ "node": "🛍️ Buscar Dados do Produto", "type": "main", "index": 0 }]] },
+    "🛍️ Buscar Dados do Produto": { "main": [[{ "node": "⚙️ Processar Produto", "type": "main", "index": 0 }]] },
+    "⚙️ Processar Produto": { "main": [[{ "node": "🔍 Verificar Preço", "type": "main", "index": 0 }]] },
+    "🧠 Groq - Llama 3.3": { "ai_languageModel": [[{ "node": "🤖 IA - Chamada", "type": "ai_languageModel", "index": 0 }]] },
+    "✍️ Montar Postagem": { "main": [[{ "node": "📤 Enviar WhatsApp - Evolution", "type": "main", "index": 0 }]] },
+    "📤 Enviar WhatsApp - Evolution": { "main": [[{ "node": "✅ Confirmar - Telegram", "type": "main", "index": 0 }]] },
+    "🤖 IA - Chamada": { "main": [[{ "node": "✍️ Montar Postagem", "type": "main", "index": 0 }]] },
+    "🔍 Verificar Preço": { "main": [[{ "node": "🤖 IA - Chamada", "type": "main", "index": 0 }], [{ "node": "❌ Aviso - Sem Preço", "type": "main", "index": 0 }]] },
+    "🌐 Webhook - Conta Gotas": { "main": [[{ "node": "🍪 Buscar Cookies - Redis", "type": "main", "index": 0 }]] }
   },
-  "active": true,
+  "active": false,
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate",
-    "availableInMCP": false
-  },
-  "versionId": "28fc10dd-1944-4b3d-a0df-54f08d131d53",
-  "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "c213914f45b59f25d4c4e9045cbcd01704759b8090c357fc58ec0d1b58f01501"
-  },
-  "id": "j5o0niOThbhiFbTd",
-  "tags": []
+    "binaryMode": "separate"
+  }
 }
