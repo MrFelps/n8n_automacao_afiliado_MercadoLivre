@@ -1,7 +1,4 @@
-// ==========================================
-// CONFIGURAÇÕES
 const MEU_CHAT_ID = "000"; 
-// ==========================================
 
 function doGet() {
   return HtmlService.createHtmlOutputFromFile('index')
@@ -9,7 +6,6 @@ function doGet() {
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
-// Função chamada pela interface para processar cada lote
 function enviarLoteParaN8n(webhookUrl, urls) {
   let sucessos = 0;
   
@@ -30,7 +26,6 @@ function enviarLoteParaN8n(webhookUrl, urls) {
     try {
       UrlFetchApp.fetch(webhookUrl, options);
       sucessos++;
-      // Pequena pausa de segurança entre envios do mesmo lote para não atropelar o n8n
       Utilities.sleep(1500); 
     } catch (e) {
       Logger.log("Erro no envio da URL: " + urls[i]);

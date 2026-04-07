@@ -158,7 +158,6 @@
   </div>
 
   <script>
-    // ── Estado ──────────────────────────────────────────────
     let fila = [];
     let isSending = false;
     let proximoTurnoTimestamp = 0;
@@ -167,7 +166,6 @@
     let confTamanho = 1;
     let confIntervalo = 10;
 
-    // ── Init ────────────────────────────────────────────────
     window.onload = function () {
       setupBtns('turnoOptions', v => { confTurno = v; atualizarResumo(); });
       setupBtns('loteOptions', v => { confTamanho = parseInt(v); atualizarResumo(); });
@@ -192,7 +190,6 @@
       document.getElementById('ResumoConfig').innerText = `Estratégia: Enviar ${pText} ${tText}, aguardando ${confIntervalo}s entre eles.`;
     }
 
-    // ── Utils de Tempo e Promessas ─────────
     function formatTime(sec) {
       let h = Math.floor(sec / 3600);
       let m = Math.floor((sec % 3600) / 60);
@@ -212,7 +209,6 @@
       });
     }
 
-    // ── Persistência e Fila ─────────────────────────────────
     function salvarStorage() { sessionStorage.setItem('ml_fila', JSON.stringify(fila)); }
     function carregarDoStorage() {
       try { const saved = sessionStorage.getItem('ml_fila'); if (saved) fila = JSON.parse(saved); } catch(e) { fila = []; }
@@ -257,17 +253,16 @@
       salvarStorage();
     }
 
-    // ── Lógica de Agendamento e Disparo ──────────────────────
     async function iniciarEnvio() {
       if (!document.getElementById('webhookUrl').value.trim()) return alert('Insira a URL do n8n.');
       if (fila.filter(i => i.status === 'pendente' || i.status === 'erro').length === 0) return alert('Fila vazia.');
 
       isSending = true;
-      proximoTurnoTimestamp = 0; // Zera para calcular o próximo
+      proximoTurnoTimestamp = 0;
       document.getElementById('startBtn').disabled = true;
       document.getElementById('cancelBtn').disabled = false;
       
-      processarFila(); // Inicia o laço contínuo
+      processarFila();
     }
 
     function cancelarEnvio() {
@@ -292,7 +287,7 @@
           else proxHora = 10;
 
           let alvo = new Date();
-          if (proxHora === 10 && hora >= 19) alvo.setDate(alvo.getDate() + 1); // Dia seguinte
+          if (proxHora === 10 && hora >= 19) alvo.setDate(alvo.getDate() + 1);
           alvo.setHours(proxHora, 0, 0, 0);
           proximoTurnoTimestamp = alvo.getTime();
       }
